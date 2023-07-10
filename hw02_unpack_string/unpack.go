@@ -1,4 +1,4 @@
-package main
+package hw02unpackstring
 
 import (
 	"errors"
@@ -8,55 +8,49 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
+func writeAndClean(out *strings.Builder, write string, symbol *string) {
+	if len(write) > 0 {
+		out.WriteString(write)
+	}
+	*symbol = ""
+}
+
 func Unpack(inStr string) (string, error) {
-
 	outStr := strings.Builder{}
-	formatStr := []rune(inStr)
 	writeSym := ""
-	ecran := false
-
-	for _, sym := range formatStr {
-
+	backslash := false
+	for _, sym := range inStr {
 		num, errNum := strconv.Atoi(string(sym))
-
-		if string(sym) == `\` && !ecran {
-			if len(writeSym) > 0 {
-				outStr.WriteString(writeSym)
-				writeSym = ""
+		if string(sym) == `\` {
+			if !backslash {
+				writeAndClean(&outStr, writeSym, &writeSym)
+				backslash = true
+			} else {
+				writeSym = string(sym)
+				backslash = false
 			}
-			ecran = true
 			continue
 		}
 
-		if errNum == nil && !ecran {
-			if len(writeSym) > 0 {
-				if num > 0 {
-					outStr.WriteString(strings.Repeat(writeSym, num))
-				}
-				writeSym = ""
-			} else {
+		if errNum == nil && !backslash {
+			if len(writeSym) == 0 {
 				return "", ErrInvalidString
 			}
+
+			if num > 0 {
+				writeAndClean(&outStr, strings.Repeat(writeSym, num), &writeSym)
+			}
+			writeSym = ""
 		} else {
-			if ecran && string(sym) != `\` && errNum != nil {
+			if backslash && errNum != nil {
 				return "", ErrInvalidString
 			}
-			if len(writeSym) > 0 {
-				outStr.WriteString(writeSym)
-				writeSym = ""
-			}
-
-			if string(sym) != `\` || ecran {
-				writeSym = string(sym)
-				ecran = false
-			}
-
+			writeAndClean(&outStr, writeSym, &writeSym)
+			writeSym = string(sym)
+			backslash = false
 		}
 	}
-	if len(writeSym) > 0 {
-		outStr.WriteString(writeSym)
-		writeSym = ""
-	}
+	writeAndClean(&outStr, writeSym, &writeSym)
 
 	return outStr.String(), nil
 }
