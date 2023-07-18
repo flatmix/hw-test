@@ -1,4 +1,4 @@
-package main
+package hw03frequencyanalysis
 
 import (
 	"sort"
