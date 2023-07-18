@@ -19,12 +19,7 @@ func Top10(text string) []string {
 		if len(word) == 0 {
 			continue
 		}
-		entry, ok := wordsMap[word]
-		if !ok {
-			wordsMap[word] = 1
-		} else {
-			wordsMap[word] = entry + 1
-		}
+		wordsMap[word]++
 	}
 
 	wordsArr := make([]WordItem, len(wordsMap))
