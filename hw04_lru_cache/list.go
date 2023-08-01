@@ -42,8 +42,8 @@ type ListItem struct {
 
 type list struct {
 	firstItem *ListItem
-	lastItem *ListItem
-	len      int
+	lastItem  *ListItem
+	len       int
 }
 
 func (l *list) MoveToFront(i *ListItem) {

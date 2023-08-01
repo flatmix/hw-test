@@ -72,7 +72,6 @@ func TestCache(t *testing.T) {
 }
 
 func TestCacheMultithreading(t *testing.T) {
-
 	c := NewCache(10)
 	mu := &sync.Mutex{}
 	wg := &sync.WaitGroup{}
