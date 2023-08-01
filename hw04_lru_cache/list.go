@@ -42,7 +42,6 @@ type ListItem struct {
 
 type list struct {
 	firstItem *ListItem
-	// item      *ListItem
 	lastItem *ListItem
 	len      int
 }
