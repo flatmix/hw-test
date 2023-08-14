@@ -69,6 +69,41 @@ func TestCache(t *testing.T) {
 		require.True(t, ok)
 		require.Equal(t, 200, val)
 	})
+
+	t.Run("evict logic", func(t *testing.T) {
+		c := NewCache(3)
+
+		c.Set("aaa", 100) // aaa
+		c.Set("bbb", 200) // bbb aaa
+		c.Set("ccc", 300) // ccc bbb aaa
+		c.Set("ddd", 400) // ddd ccc bbb
+
+		val, ok := c.Get("aaa")
+		require.False(t, ok)
+		require.Nil(t, val)
+
+		c.Get("bbb") // bbb ddd ccc
+
+		c.Get("ddd") // ddd bbb ccc
+
+		val, ok = c.Get("ddd")
+		require.True(t, ok)
+		require.Equal(t, 400, val) // ddd bbb ccc
+
+		c.Set("eee", 500) // eee ddd bbb
+
+		_, ok = c.Get("bbb")
+		require.True(t, ok)
+
+		_, ok = c.Get("ccc")
+		require.False(t, ok)
+
+		_, ok = c.Get("eee")
+		require.True(t, ok)
+
+		_, ok = c.Get("ddd")
+		require.True(t, ok)
+	})
 }
 
 func TestCacheMultithreading(t *testing.T) {

@@ -49,6 +49,7 @@ type list struct {
 func (l *list) MoveToFront(i *ListItem) {
 	l.Remove(i)
 	insertBefore(l, l.firstItem, i)
+	l.len++
 }
 
 func (l *list) Remove(i *ListItem) {
