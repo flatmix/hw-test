@@ -64,8 +64,6 @@ func (c *lruCache) Get(key Key) (interface{}, bool) {
 				c.queue.MoveToFront(item)
 			}
 			return elem.Value, exist
-		} else {
-			return nil, exist
 		}
 	}
 	return nil, exist
