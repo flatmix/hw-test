@@ -118,7 +118,12 @@ func TestPipeline(t *testing.T) {
 		}
 		elapsed := time.Since(start)
 
-		require.Equal(t, []string{"120", "140", "160", "180", "200", "220", "240", "260", "280", "300", "320", "340", "360", "380", "400", "420", "440", "460", "480", "500"}, result)
+		require.Equal(t,
+			[]string{
+				"120", "140", "160", "180", "200", "220", "240", "260", "280", "300",
+				"320", "340", "360", "380", "400", "420", "440", "460", "480", "500",
+			},
+			result)
 		require.Less(t, int64(elapsed), int64(sleepPerStage)*int64(len(stages)+len(data)-1)+int64(fault))
 	})
 
