@@ -44,13 +44,6 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		return ErrOffsetExceedsFileSize
 	}
 
-	defer func() error {
-		if err := fileIn.Close(); err != nil {
-			return fmt.Errorf("ошибка при закрытии файла: %w", err)
-		}
-		return nil
-	}()
-
 	if limit == 0 && offset == 0 {
 		fileOut, _ := os.Create(toPath)
 
@@ -107,5 +100,10 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	}
 
 	barRead.Finish()
+
+	if err := fileIn.Close(); err != nil {
+		return fmt.Errorf("ошибка при закрытии файла: %w", err)
+	}
+
 	return nil
 }
