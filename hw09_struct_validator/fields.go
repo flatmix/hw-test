@@ -205,7 +205,7 @@ func (fields *FieldsForValidate) CheckRegExp(name string, value reflect.Value, r
 	return nil
 }
 
-func (fields *FieldsForValidate) Validate() error {
+func (fields *FieldsForValidate) Validate() error { //nolint:gocognit //function for determining the type of validation
 	for _, field := range fields.fields {
 		for _, tag := range field.validateTags {
 			switch tag.name {
